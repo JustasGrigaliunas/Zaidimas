@@ -14,7 +14,9 @@ namespace Zaidimas
             Logger.Instance().Info("Program started");
 
             CharacterFactory CharFactory = new CharacterFactory();
-            Spell blind = new Spell("Blind", 15, 3, 8, "Blinds only near objects, with big amount of damage", new Blind());
+            Spell blind = new Spell("Blind", 15, 3, "Blinds only near objects, with big amount of damage", new Blind());
+            Spell knockout = new Spell("knockout", 2, 8, "Knockout created", new Knockout());
+
 
             MyCharacter myCharacter = CharFactory.CreateCharacter(2, "Elfas112");
 
@@ -40,6 +42,7 @@ namespace Zaidimas
                 myCharacter.Walk();
                 myCharacter.Walk();
                 myCharacter.Walk();
+                myCharacter.CastSpell(knockout);
                 myCharacter.Walk();
 
             }
