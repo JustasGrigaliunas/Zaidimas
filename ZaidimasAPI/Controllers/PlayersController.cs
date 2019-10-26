@@ -18,6 +18,20 @@ namespace ZaidimasAPI.Controllers
         public PlayersController(PlayerContext context)
         {
             _context = context;
+
+            if (_context.Players.Count() == 0)
+            {
+                // Create a new Player if collection is empty,
+                // which means you can't delete all Players.
+                for (int i = 0; i < 10; i++)
+                {
+                    
+                    Player p = new Player { Name = "Player-" + i, Level = 0, Damage = 0, HealthPoints = 0 };
+                    _context.Players.Add(p);
+                }
+
+                _context.SaveChanges();
+            }
         }
 
         // GET: api/Players

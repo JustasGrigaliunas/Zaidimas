@@ -18,6 +18,20 @@ namespace ZaidimasAPI.Controllers
         public SpellsController(PlayerContext context)
         {
             _context = context;
+
+            if (_context.Spells.Count() == 0)
+            {
+                // Create a new spells if collection is empty,
+                // which means you can't delete all Players.
+                for (int i = 0; i < 10; i++)
+                {
+
+                    Spell p = new Spell { Name = "Spell-" + i, Level = 0, Damage = 0,  Description ="test-"+i  };
+                    _context.Spells.Add(p);
+                }
+
+                _context.SaveChanges();
+            }
         }
 
         // GET: api/Spells

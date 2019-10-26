@@ -36,14 +36,14 @@ namespace Zaidimas
                         break;
 
                 }
-                myCharacter.Walk();
+                myCharacter.Walk(1);
                 myCharacter.CastSpell(blind);
-                myCharacter.Walk();
-                myCharacter.Walk();
-                myCharacter.Walk();
-                myCharacter.Walk();
+                myCharacter.Walk(1);
+                myCharacter.Walk(2);
+                myCharacter.Walk(3);
+                myCharacter.Walk(1);
                 myCharacter.CastSpell(knockout);
-                myCharacter.Walk();
+                myCharacter.Walk(4);
 
             }
 

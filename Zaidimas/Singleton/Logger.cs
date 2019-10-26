@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Text;
+using System.Reflection;
 using log4net;
 using log4net.Config;
 
@@ -15,8 +16,12 @@ namespace Zaidimas.Singleton
             if (_logger == null)
             {
 
+
+                //_logger = LogManager.GetLogger(nameof(Zaidimas));
+
                 _logger = LogManager.GetLogger(System.Reflection.MethodBase.GetCurrentMethod().DeclaringType);
-            }
+               
+               }
         }
 
         public static Logger Instance()

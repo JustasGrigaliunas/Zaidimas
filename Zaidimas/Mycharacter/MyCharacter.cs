@@ -2,31 +2,82 @@
 using System.Collections.Generic;
 using System.Text;
 using Zaidimas.Observer;
+using Zaidimas.Singleton;
 using Zaidimas.Strategy;
+using System.Runtime.Serialization;
+using Microsoft.CodeAnalysis;
+using Newtonsoft.Json;
+using Zaidimas.Models;
 
 namespace Zaidimas.Mycharacter
 {
     public abstract class MyCharacter : IEntity
     {
+        private long id = 0;
         private int timesWalked = 0;
         private List<IObserver> observers = new List<IObserver>();
-        private string name { get; set; }
-        private int healthPoints { get; set; }
-        private int damage { get; set; }
-        private int level { get; set; }
+        public string name {get; set; }
+        public int healthPoints { get; set; }
+        public int damage { get; set; }
+        public int level { get; set; }
+        public int type { get; set; }
+
+        private int coordinateX { get; set; }
+
+        private int coordinateY { get; set; }
+
+
 
         public ICastSpell spellAction;
-        public MyCharacter(string n, int hp, int dmg, int lvl)
+        public MyCharacter(string n, int hp, int dmg, int lvl, int tp)
         {
             name = n;
             healthPoints = hp;
             damage = dmg;
             level = lvl;
+            type = tp;
+            coordinateX = 0;
+            coordinateY = 0;
+
+
+            var json = JsonConvert.SerializeObject(this);
+            json= json.Remove(2, 19); //remove spellAction from string 
+            var response =  HttpClientToAPI.Instance().Post("players", json);
+            Player pl = JsonConvert.DeserializeObject<Player>(response);
+            id = pl.Id;
+            HttpClientToAPI.Instance().Post("coordinates", "{\"PlayerId\":"+id+ ", \"CoordinateX\":0, \"CoordinateY\":0}");
         }
-        public void Walk()
+        public void Walk(int type)
         {
+            switch (type)
+            {
+                case 1: //right
+                    coordinateX += 1;
+                    HttpClientToAPI.Instance().Put("coordinates/"+id, "{ \"CoordinateX\":"+ coordinateX + "}");
+
+                    break;
+                case 2: //left\
+                    coordinateX -= 1;
+                    HttpClientToAPI.Instance().Put("coordinates/" + id, "{ \"CoordinateX\":" + coordinateX + "}");
+
+                    break;
+                case 3: //up
+                    coordinateY += 1;
+                    HttpClientToAPI.Instance().Put("coordinates/" + id, "{ \"CoordinateY\":" + coordinateY + "}");
+
+                    break;
+                case 4: //down
+                    coordinateY -= 1;
+                    HttpClientToAPI.Instance().Put("coordinates/" + id, "{ \"CoordinateY\":" + coordinateY + "}");
+
+                    break;
+
+                default:
+                    break;
+            }
+
             timesWalked++;
-            Console.WriteLine(this.name + ": Walking");
+            Console.WriteLine(this.name + ": Walking. Coordinates: "+coordinateX +" And "+coordinateY);
             if (timesWalked == 1)
             {
 
@@ -61,6 +112,13 @@ namespace Zaidimas.Mycharacter
             observers.ForEach(x => x.Update(message));
         }
 
+
+//        public string ToJsonString()
+//{
+//            var json = JsonConvert.SerializeObject(this.);
+
+//            return json;
+//        }
 
     }
 

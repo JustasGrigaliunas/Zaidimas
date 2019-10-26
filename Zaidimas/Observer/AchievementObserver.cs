@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Text;
+using Zaidimas.Singleton;
 
 namespace Zaidimas.Observer
 {
@@ -11,7 +12,8 @@ namespace Zaidimas.Observer
             switch (message)
             {
                 case "EVENT_CHARACTER_CREATION":
-                    Console.WriteLine("Achievement Unlocked: New beginnings!"); break;
+                    Console.WriteLine("Achievement Unlocked: New beginnings!");
+                    break;
                 case "EVENT_TRIED_WALKING":
                     Console.WriteLine("Achievement Unlocked: First steps!"); break;
                 case "EVENT_TRIED_ATTACKING":

@@ -15,5 +15,7 @@ namespace ZaidimasAPI.Models
 
         public DbSet<Player> Players { get; set; }
         public DbSet<Spell> Spells { get; set; }
+        public DbSet<Coordinate> Coordinates { get; set; }
+
     }
 }
