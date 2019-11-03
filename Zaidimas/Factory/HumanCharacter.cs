@@ -8,6 +8,6 @@ namespace Zaidimas.Factory
     class HumanCharacter : MyCharacter
     {
         internal HumanCharacter(String n, int hp, int dmg, int lvl) :
-            base(n, hp, dmg, lvl, 1) { }
+            base(n, hp, dmg, lvl, 1, 5) { } //1 - type , 5- armor depends from character type
     }
 }

@@ -1,4 +1,6 @@
 ﻿using System;
+using Zaidimas.Decorator;
+using Zaidimas.Decorator.Interface;
 using Zaidimas.Factory;
 using Zaidimas.Mycharacter;
 using Zaidimas.Observer;
@@ -44,6 +46,25 @@ namespace Zaidimas
                 myCharacter.Walk(1);
                 myCharacter.CastSpell(knockout);
                 myCharacter.Walk(4);
+                ArmorUnit arm = new ArmorUnit("Shirts", 4);
+                Armor arm1 = new Gloves(new BasicArmor(arm));
+                myCharacter.SetArmor(arm1);
+                Console.WriteLine(myCharacter.ArmorDecorator.getArmors().ToString());
+                arm1 = new Gloves(arm1);
+                
+
+
+                myCharacter.SetArmor(arm1);
+                Console.WriteLine(myCharacter.ArmorDecorator.getArmors().ToString());
+
+                arm1 = new Helmet(arm1);
+
+
+
+                myCharacter.SetArmor(arm1);
+                Console.WriteLine(myCharacter.ArmorDecorator.getArmors().ToString());
+
+
 
             }
 

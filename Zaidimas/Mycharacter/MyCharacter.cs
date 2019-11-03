@@ -8,6 +8,8 @@ using System.Runtime.Serialization;
 using Microsoft.CodeAnalysis;
 using Newtonsoft.Json;
 using Zaidimas.Models;
+using Zaidimas.Decorator.Interface;
+using Zaidimas.Decorator;
 
 namespace Zaidimas.Mycharacter
 {
@@ -22,14 +24,19 @@ namespace Zaidimas.Mycharacter
         public int level { get; set; }
         public int type { get; set; }
 
+
         private int coordinateX { get; set; }
 
         private int coordinateY { get; set; }
 
+        public Armor ArmorDecorator;
 
 
         public ICastSpell spellAction;
-        public MyCharacter(string n, int hp, int dmg, int lvl, int tp)
+
+        //public ArmorUnit characterArmors;
+
+        public MyCharacter(string n, int hp, int dmg, int lvl, int tp, int arm)
         {
             name = n;
             healthPoints = hp;
@@ -38,14 +45,16 @@ namespace Zaidimas.Mycharacter
             type = tp;
             coordinateX = 0;
             coordinateY = 0;
+            //characterArmors = new ArmorUnit("Shirts And pants", arm); 
+
 
 
             var json = JsonConvert.SerializeObject(this);
-            json= json.Remove(2, 19); //remove spellAction from string 
-            var response =  HttpClientToAPI.Instance().Post("players", json);
+            json = json.Remove(2, 41); //remove spellAction from string 
+            var response = HttpClientToAPI.Instance().Post("players", json);
             Player pl = JsonConvert.DeserializeObject<Player>(response);
             id = pl.Id;
-            HttpClientToAPI.Instance().Post("coordinates", "{\"PlayerId\":"+id+ ", \"CoordinateX\":0, \"CoordinateY\":0}");
+            HttpClientToAPI.Instance().Post("coordinates", "{\"PlayerId\":" + id + ", \"CoordinateX\":0, \"CoordinateY\":0}");
         }
         public void Walk(int type)
         {
@@ -112,13 +121,20 @@ namespace Zaidimas.Mycharacter
             observers.ForEach(x => x.Update(message));
         }
 
+        public void SetArmor(Armor arm)
+        {
+             ArmorDecorator = arm;
+        }
+        public ArmorUnit getArmors()
+        {
+            return ArmorDecorator.getArmors();
 
-//        public string ToJsonString()
-//{
-//            var json = JsonConvert.SerializeObject(this.);
+        }
+        //public ArmorUnit getArmors()
+        //{
+        //    return ArmorDecorator.getArmors();
+        //}
 
-//            return json;
-//        }
 
     }
 
