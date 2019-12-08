@@ -3,16 +3,19 @@ using System.Collections.Generic;
 using System.Linq;
 using Zaidimas.Adapter;
 using Zaidimas.Command;
+using Zaidimas.Composite;
 using Zaidimas.Decorator;
 using Zaidimas.Decorator.Interface;
 using Zaidimas.Factory;
 using Zaidimas.Iterator;
 using Zaidimas.Mementoo;
 using Zaidimas.Mycharacter;
+using Zaidimas.NullObject;
 using Zaidimas.Observer;
 using Zaidimas.Singleton;
 using Zaidimas.Strategy;
 using Zaidimas.Template;
+using Zaidimas.Visitor;
 
 namespace Zaidimas
 {
@@ -91,6 +94,74 @@ namespace Zaidimas
 
 
             }
+            // state
+
+            myCharacter.AttackInState();
+            myCharacter.changeState(myCharacter.blindedState, 3000);
+            myCharacter.AttackInState();
+            myCharacter.CastSpellInState(blind);
+            myCharacter.WalkInState(3);
+            myCharacter.changeState(myCharacter.normalState, 3000);
+            myCharacter.WalkInState(4);
+
+            // composite
+            MyCharacter elf = CharFactory.CreateCharacter(2, "Elf");
+            myCharacter.printGoldAndName();
+            MyCharacter humanChar = CharFactory.CreateCharacter(3, "Human");
+            MyCharacter humanChar2 = CharFactory.CreateCharacter(3, "Human2");
+            MyCharacter humanChar3 = CharFactory.CreateCharacter(2, "Human3");
+
+            int goldForKill = 3000;
+            Console.WriteLine($"You have gained {goldForKill} coins!");
+            IComponent elfComp = elf;
+            IComponent humanCharComp = humanChar;
+            IComponent myCharacterComp = myCharacter;
+            IComponent humanChar2Comp = humanChar2;
+            IComponent humanChar3Comp = humanChar3;
+
+            IComponent party = new Team
+            {
+                name = "Best party ever",
+                players =
+                {
+                    elfComp,
+                    humanCharComp,
+                    humanChar2Comp,
+                    humanChar3Comp
+                }
+            };
+            IComponent teams = new Team
+            {
+                players = { party, myCharacter }
+            };
+            Logger.Instance().Info("Team");
+            teams.addGold(goldForKill);
+            teams.printGoldAndName();
+            // chain of responsibility
+            myCharacter.GetRank();
+            myCharacter.LevelUp();
+            myCharacter.GetRank();
+            myCharacter.LevelUp();
+            
+            myCharacter.GetRank();
+            myCharacter.LevelDown();
+            myCharacter.GetRank();
+            //null object
+
+            ICommandFactory commandFactory = new ICommandFactory();
+            EnemyHuman EHuman = new EnemyHuman(50, 100, 1000, 1, new Tuple<int, int>(15, 5));
+            IEnemy enemyHuman = new EnemyHumanAdapter(EHuman);
+            ICommand retreatCommand = commandFactory.CreateCommand(enemyHuman, 3);
+            ICommand nullCommand = commandFactory.CreateCommand(enemyHuman, 1123464);
+
+            //visitor
+
+            EnemyHuman tank = new EnemyHuman(2, 2, 2, 2, new Tuple<int, int>(2, 1));
+            ExperienceWorthCalculator normalGain = new NormalExperienceGain();
+            ExperienceWorthCalculator boostedGain = new BoostedExperienceGain();
+
+            Console.WriteLine($"Without exp boost enemy is worth: {tank.GetExp(normalGain)} exp");
+            Console.WriteLine($"With exp boost enemy is worth: {tank.GetExp(boostedGain)} exp");
 
             //template
 

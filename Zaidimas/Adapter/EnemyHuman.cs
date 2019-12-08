@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Text;
 using Zaidimas.Prototype;
+using Zaidimas.Visitor;
 
 namespace Zaidimas.Adapter
 {
@@ -44,6 +45,10 @@ namespace Zaidimas.Adapter
         public string GetDetails()
         {
             return string.Format("Damage: {0}, Armor: {1}, Health: {2}, Speed: {3}, Position: {4},{5}", damage, armor, health, speed, position.Item1, position.Item2);
+        }
+        public int GetExp(ExperienceWorthCalculator ew)
+        {
+            return ew.calculateExperienceWorth(this);
         }
     }
 }
