@@ -8,6 +8,7 @@ using Zaidimas.Decorator;
 using Zaidimas.Decorator.Interface;
 using Zaidimas.Factory;
 using Zaidimas.Iterator;
+using Zaidimas.Mediator;
 using Zaidimas.Mementoo;
 using Zaidimas.Mycharacter;
 using Zaidimas.NullObject;
@@ -162,6 +163,18 @@ namespace Zaidimas
 
             Console.WriteLine($"Without exp boost enemy is worth: {tank.GetExp(normalGain)} exp");
             Console.WriteLine($"With exp boost enemy is worth: {tank.GetExp(boostedGain)} exp");
+
+            //mediator 
+
+            Tracker m = new Tracker();
+
+            Notification c1 = new Notification(m);
+            Achievement c2 = new Achievement(m);
+            m.not = c1;
+            m.ach = c2;
+
+            c1.Send("10 seconds Have passed");
+            c2.Send("Achievement Uncloked: Time flies");
 
             //template
 
